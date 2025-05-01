@@ -1,0 +1,11 @@
+/ {
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <1>;
+		ranges;
+		memory@@@MEMORY_ADDR@@ {
+			reg = <0 @@QUINCE_PHRAM_ADDR@@ @@QUINCE_PHRAM_SIZE@@>;
+			no-map;
+		};
+	};
+};

@@ -9,7 +9,7 @@ SRC_URI:append = " \
 "
 
 do_install:append() {
-	if ${@bb.utils.contains('QUINCE_DISABLE_LAN_STARTUP', '0', 'true', 'false', d)}; then
+	if ${@bb.utils.contains('QUINCE_DISABLE_LAN_STARTUP', '1', 'true', 'false', d)}; then
 		install -m 0644 ${WORKDIR}/interfaces_lo ${D}${sysconfdir}/network/interfaces
 	elif ${@bb.utils.contains('MACHINE', 'am335x-evm', 'true', 'false', d)}; then
 		install -m 0644 ${WORKDIR}/interfaces_lo_eth0 ${D}${sysconfdir}/network/interfaces

@@ -8,7 +8,7 @@ SRC_URI:append = " \
 do_install:append() {
     install -d ${D}${sysconfdir}/systemd/network/
 
-	if ${@bb.utils.contains('QUINCE_DISABLE_LAN_STARTUP', '0', 'true', 'false', d)}; then
+	if ${@bb.utils.contains('QUINCE_DISABLE_LAN_STARTUP', '1', 'true', 'false', d)}; then
 		;
 	elif ${@bb.utils.contains('MACHINE', 'am335x-evm', 'true', 'false', d)}; then
 		install -m 0644 ${WORKDIR}/10-eth.network ${D}${sysconfdir}/systemd/network/10-eth.network

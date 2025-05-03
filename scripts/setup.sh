@@ -51,8 +51,8 @@ REPRODUCIBLE_TIMESTAMP_ROOTFS = "${TIMESTAMP_ROOTFS}"
 # Override hostname
 #hostname:pn-base-files = "myhostname"
 
-# Package names in the /opt directory (This system calls /opt/${QUINCE_OPT_PACKAGE_NAME}/etc/rc.local at startup)
-#QUINCE_OPT_PACKAGE_NAME ?= "${DISTRO}"
+# Package names in the /opt directory (This system calls /opt/\${QUINCE_OPT_PACKAGE_NAME}/etc/rc.local at startup)
+#QUINCE_OPT_PACKAGE_NAME ?= "quince"
 
 # Disable LAN connection at startup
 #QUINCE_DISABLE_LAN_STARTUP ?= "0"

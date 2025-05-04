@@ -78,7 +78,7 @@ EOM
 echo "Format boot partition..."
 sudo mkfs.vfat -F 32 -n "boot" /dev/${SD_DRIVE}1
 echo "Format rootfs partition..."
-sudo mkfs.ext4 -L "rootfs" /dev/${SD_DRIVE}2
+sudo mkfs.ext4 -F -L "rootfs" /dev/${SD_DRIVE}2
 
 
 echo "Mount SD card..."

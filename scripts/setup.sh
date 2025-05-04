@@ -54,6 +54,9 @@ REPRODUCIBLE_TIMESTAMP_ROOTFS = "${TIMESTAMP_ROOTFS}"
 # Package names in the /opt directory (This system calls /opt/\${QUINCE_OPT_PACKAGE_NAME}/etc/rc.local at startup)
 #QUINCE_OPT_PACKAGE_NAME ?= "quince"
 
+# Disable automatically mount storage devices
+#QUINCE_DISABLE_AUTOMOUNT_STORAGE ?= "0"
+
 # Disable LAN connection at startup
 #QUINCE_DISABLE_LAN_STARTUP ?= "0"
 

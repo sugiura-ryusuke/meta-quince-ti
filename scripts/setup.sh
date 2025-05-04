@@ -85,11 +85,12 @@ fi
 
 # Copy scripts
 mkdir -p scripts
-cp ${SCRIPT_DIR}/bitbake-minimal-am335x-evm.sh scripts
-cp ${SCRIPT_DIR}/clean-build.sh scripts
-cp ${SCRIPT_DIR}/deploy.sh scripts
-cp ${SCRIPT_DIR}/flash-wic-image.sh scripts
-cp ${SCRIPT_DIR}/write-sdcard.sh scripts
+SCRIPTS=`ls ${SCRIPT_DIR}`
+for f in ${SCRIPTS}; do
+	if [ "${f}" != "setup.sh" ]; then
+		cp ${SCRIPT_DIR}/${f} scripts
+	fi
+done
 
 
 # Add layers for building Quince Distribution

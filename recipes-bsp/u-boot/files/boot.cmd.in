@@ -90,44 +90,51 @@ load ${boot_media} ${dev_number}:1 ${loadaddr} ${kernel_imagetype};
 setenv bootargs root=PARTUUID=${uuid} rootwait rw earlycon console=${console},${baudrate}
 
 if test -e ${phram_addr} && test -e ${phram_size}; then
-    if test -e ${rootfs_img_file} && test -e ${boot_media} ${dev_number}:2 ${rootfs_img_file}; then
+    setenv load_phram_addr ${phram_addr};
+    setenv rest_phram_size ${phram_size};
+
+    if test -e ${rootfs_img_file} && test -e @@BOOT_MEDIA@@ ${dev_number}:2 ${rootfs_img_file}; then
         # Check phram size for rootfs
-        setenv rest_phram_size ${phram_size};
-        size ${boot_media} ${dev_number}:2 ${rootfs_img_file};
-        setenv rootfs_img_size 0x${filesize}
+        size @@BOOT_MEDIA@@ ${dev_number}:2 ${rootfs_img_file};
+        setenv img_file_size 0x${filesize}
 
-        if test ${rest_phram_size} -ge ${rootfs_img_size}; then
+        if test ${rest_phram_size} -ge ${img_file_size}; then
             # Load rootfs image file
-            setenv rootfs_img_addr ${phram_addr}
-            echo Loading ${rootfs_img_file}... (addr=${rootfs_img_addr} size=${rootfs_img_size})
-            load ${boot_media} ${dev_number}:2 ${rootfs_img_addr} ${rootfs_img_file};
-            setenv bootargs ${bootargs} phram.phram=/,${rootfs_img_addr},${rootfs_img_size} root=/dev/mtdblock0
+            echo Loading ${rootfs_img_file}... (addr=${load_phram_addr} size=${img_file_size})
+            load @@BOOT_MEDIA@@ ${dev_number}:2 ${load_phram_addr} ${rootfs_img_file};
+            setenv bootargs ${bootargs} phram.phram=/,${load_phram_addr},${img_file_size} root=/dev/mtdblock0
 
-            if test -e ${opt_img_file} && test -e ${boot_media} ${dev_number}:2 ${opt_img_file}; then
-                # Check phram size for opt
-                setexpr rest_phram_size ${rest_phram_size} - ${rootfs_img_size}
-                setenv rest_phram_size 0x${rest_phram_size};
-                size ${boot_media} ${dev_number}:2 ${opt_img_file};
-                setenv opt_img_size 0x${filesize}
-
-                if test ${rest_phram_size} -ge ${opt_img_size}; then
-                    # Load opt image file
-                    setexpr opt_img_addr ${rootfs_img_addr} + ${rootfs_img_size}
-                    setenv opt_img_addr 0x${opt_img_addr}
-                    echo Loading ${opt_img_file}... (addr=${opt_img_addr} size=${opt_img_size})
-                    load ${boot_media} ${dev_number}:2 ${opt_img_addr} ${opt_img_file};
-                    setenv bootargs ${bootargs} mtdblock1=/opt,${opt_img_addr},${opt_img_size}
-                else
-                    echo Not enough phram size for loading ${opt_img_file}.
-                fi;
-            else
-                echo Not found ${opt_img_file}.
-            fi;
+            setexpr load_phram_addr ${load_phram_addr} + ${img_file_size}
+            setenv load_phram_addr 0x${load_phram_addr}
+            setexpr rest_phram_size ${rest_phram_size} - ${img_file_size}
+            setenv rest_phram_size 0x${rest_phram_size};
         else
             echo Not enough phram size for loading ${rootfs_img_file}.
         fi;
     else
         echo Not found ${rootfs_img_file}.
+    fi;
+
+    if test -e ${opt_img_file} && test -e @@BOOT_MEDIA@@ ${dev_number}:2 ${opt_img_file}; then
+        # Check phram size for opt
+        size @@BOOT_MEDIA@@ ${dev_number}:2 ${opt_img_file};
+        setenv img_file_size 0x${filesize}
+
+        if test ${rest_phram_size} -ge ${img_file_size}; then
+            # Load opt image file
+            echo Loading ${opt_img_file}... (addr=${load_phram_addr} size=${img_file_size})
+            load @@BOOT_MEDIA@@ ${dev_number}:2 ${load_phram_addr} ${opt_img_file};
+            setenv bootargs ${bootargs} mtdblock1=/opt,${load_phram_addr},${img_file_size}
+
+            setexpr load_phram_addr ${load_phram_addr} + ${img_file_size}
+            setenv load_phram_addr 0x${load_phram_addr}
+            setexpr rest_phram_size ${rest_phram_size} - ${img_file_size}
+            setenv rest_phram_size 0x${rest_phram_size};
+        else
+            echo Not enough phram size for loading ${opt_img_file}.
+        fi;
+    else
+        echo Not found ${opt_img_file}.
     fi;
 fi;
 

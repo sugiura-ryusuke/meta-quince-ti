@@ -73,5 +73,5 @@ do_configure:prepend() {
 	done
 }
 
-KERNEL_MODULE_AUTOLOAD:rpi += "${KERNEL_MODULES}"
+KERNEL_MODULE_AUTOLOAD += "${KERNEL_MODULES}"
 
